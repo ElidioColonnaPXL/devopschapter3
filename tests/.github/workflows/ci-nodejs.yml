@@ -1,0 +1,33 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Stel Node.js in
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Installeer dependencies
+        run: npm ci
+
+      - name: Test met coverage
+        run: npm test -- --coverage --ci
+
+      - name: Bewaar testresultaten
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: |
+            coverage/
+            junit.xml
+          if-no-files-found: error
