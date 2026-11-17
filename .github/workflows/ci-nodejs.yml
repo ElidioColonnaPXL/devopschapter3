@@ -31,3 +31,26 @@ jobs:
             coverage/
             junit.xml
           if-no-files-found: error
+
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Stel Node.js in
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Installeer dependencies
+        run: npm ci
+
+      - name: Controleer codekwaliteit
+        run: npm run lint
+
+      - name: Controleer opmaak met Prettier
+        run: npm run format:check
+
+      - name: Security scan
+        run: npm audit
